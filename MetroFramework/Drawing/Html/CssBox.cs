@@ -1924,7 +1924,7 @@ namespace MetroFramework.Drawing.Html
         #region Properties
 
         /// <summary>
-        /// Gets the ?box
+        /// Gets the � box
         /// </summary>
         public CssBox ListItemBox
         {
@@ -2931,7 +2931,7 @@ namespace MetroFramework.Drawing.Html
             {
                 b.OffsetTop(amount);
             }
-            //TODO: Aqu?me quede: no se mueve bien todo (probar con las tablas rojas)
+            //TODO: Aqu� me quede: no se mueve bien todo (probar con las tablas rojas)
             Location = new PointF(Location.X, Location.Y + amount);
         }
 
