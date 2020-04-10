@@ -1,4 +1,4 @@
-﻿/**
+/**
  * MetroFramework - Modern UI for WinForms
  * 
  * The MIT License (MIT)
@@ -529,6 +529,11 @@ namespace MetroFramework.Controls
             base.OnSizeChanged(e);
         }
 
+        private void BaseTextBoxCursorChanged(object sender, EventArgs e)
+        {
+            base.OnCursorChanged(e);
+        }
+
         private void BaseTextBoxContextMenuStripChanged(object sender, EventArgs e)
         {
             base.OnContextMenuStripChanged(e);
@@ -828,6 +833,7 @@ namespace MetroFramework.Controls
             baseTextBox.ClientSizeChanged += BaseTextBoxClientSizeChanged;
             baseTextBox.ContextMenuChanged += BaseTextBoxContextMenuChanged;
             baseTextBox.ContextMenuStripChanged += BaseTextBoxContextMenuStripChanged;
+            baseTextBox.CursorChanged += BaseTextBoxCursorChanged;
 
             baseTextBox.KeyDown += BaseTextBoxKeyDown;
             baseTextBox.KeyPress += BaseTextBoxKeyPress;
@@ -855,8 +861,31 @@ namespace MetroFramework.Controls
             this.InvokeGotFocus(this, e);
         }
 
+        protected override void OnMouseEnter(EventArgs e)
+        {
+            base.OnMouseEnter(e);
+            base.Cursor = Cursors.IBeam;
+            UpdateTextBoxCursor();
+
+        }       
+
+        protected override void OnMouseLeave(EventArgs e)
+        {
+            base.OnMouseLeave(e);
+            base.Cursor = Cursors.Default;
+            UpdateTextBoxCursor();
+        }
+
+
+        private void UpdateTextBoxCursor()
+        {
+            baseTextBox.Cursor = base.Cursor;
+        }
+
         private void UpdateBaseTextBox()
         {
+            UpdateTextBoxCursor();       
+
             if (_button != null)
             {
                 if ((Height % 2) > 0)
@@ -1028,10 +1057,24 @@ namespace MetroFramework.Controls
                 }
             }
 
+            protected override void OnMouseEnter(EventArgs e)
+            {
+                base.OnMouseEnter(e);
+                base.Cursor = Cursors.IBeam;                
+
+            }           
+
+            protected override void OnMouseLeave(EventArgs e)
+            {
+                base.OnMouseLeave(e);
+                base.Cursor = Cursors.Default;               
+            }
+
             protected override void OnLostFocus(EventArgs e)
             {
                 base.OnLostFocus(e);
             }
+            
         }
 
         #endregion
@@ -1075,6 +1118,7 @@ namespace MetroFramework.Controls
         [ToolboxItem(false)]
         public class MetroTextButton : Button, IMetroControl
         {
+            
             #region Interface
 
             [Category(MetroDefaults.PropertyCategory.Appearance)]
@@ -1398,7 +1442,7 @@ namespace MetroFramework.Controls
                 isHovered = true;
                 Invalidate();
 
-                base.OnMouseEnter(e);
+                base.OnMouseEnter(e);                
             }
 
             protected override void OnMouseDown(MouseEventArgs e)
