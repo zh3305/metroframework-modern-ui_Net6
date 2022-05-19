@@ -52,12 +52,12 @@ namespace MetroFramework.Forms
             singletonWindow.Resizable = false;
             singletonWindow.Movable = true;
             singletonWindow.StartPosition = FormStartPosition.Manual;
-            
-            if (parent != null && parent is IMetroForm)
+
+            if (parent is IMetroForm parentform)
             {
-                singletonWindow.Theme = ((IMetroForm)parent).Theme;
-                singletonWindow.Style = ((IMetroForm)parent).Style;
-                singletonWindow.StyleManager = ((IMetroForm)parent).StyleManager.Clone(singletonWindow) as MetroStyleManager;
+                singletonWindow.Theme = parentform.Theme;
+                singletonWindow.Style = parentform.Style;
+                singletonWindow.StyleManager = parentform.StyleManager.Clone(singletonWindow) as MetroStyleManager;
             }
 
             singletonWindow.Show();
@@ -100,12 +100,7 @@ namespace MetroFramework.Forms
             }
         }
 
-        private bool cancelTimer = false;
-        public bool CancelTimer
-        {
-            get { return cancelTimer; }
-            set { cancelTimer = value; }
-        }
+        public bool CancelTimer { get; set; } = false;
 
         private readonly int closeTime = 0;
         private int elapsedTime = 0;
@@ -118,6 +113,7 @@ namespace MetroFramework.Forms
         {
             controlContainer = new MetroPanel();
             Controls.Add(controlContainer);
+            Initialized();
         }
 
         public MetroTaskWindow(int duration, Control userControl)
@@ -132,63 +128,65 @@ namespace MetroFramework.Forms
         }
 
 
-        private bool isInitialized = false;
+        private void Initialized()
+        {
+
+
+            controlContainer.Theme = Theme;
+            controlContainer.Style = Style;
+            controlContainer.StyleManager = StyleManager;
+
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Movable = true;
+
+            TopMost = true;
+
+            Size = new Size(400, 200);
+
+            Taskbar myTaskbar = new Taskbar();
+            switch (myTaskbar.Position)
+            {
+                case TaskbarPosition.Left:
+                    Location = new Point(myTaskbar.Bounds.Width + 5, myTaskbar.Bounds.Height - Height - 5);
+                    break;
+                case TaskbarPosition.Top:
+                    Location = new Point(myTaskbar.Bounds.Width - Width - 5, myTaskbar.Bounds.Height + 5);
+                    break;
+                case TaskbarPosition.Right:
+                    Location = new Point(myTaskbar.Bounds.X - Width - 5, myTaskbar.Bounds.Height - Height - 5);
+                    break;
+                case TaskbarPosition.Bottom:
+                    Location = new Point(myTaskbar.Bounds.Width - Width - 5, myTaskbar.Bounds.Y - Height - 5);
+                    break;
+                case TaskbarPosition.Unknown:
+                default:
+                    Location = new Point(Screen.PrimaryScreen.Bounds.Width - Width - 5, Screen.PrimaryScreen.Bounds.Height - Height - 5);
+                    break;
+            }
+
+            controlContainer.Location = new Point(0, 60);
+            controlContainer.Size = new Size(Width - 40, Height - 80);
+            controlContainer.Anchor = AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Left;
+
+            controlContainer.AutoScroll = false;
+            controlContainer.HorizontalScrollbar = false;
+            controlContainer.VerticalScrollbar = false;
+            controlContainer.Refresh();
+
+            if (StyleManager != null)
+            {
+                StyleManager.Update();
+            }
+
+
+            MoveAnimation myMoveAnim = new MoveAnimation();
+            myMoveAnim.Start(controlContainer, new Point(20, 60), TransitionType.EaseInOutCubic, 15);
+        }
+
+
         protected override void OnActivated(EventArgs e)
         {
-            if (!isInitialized)
-            {
-                controlContainer.Theme = Theme;
-                controlContainer.Style = Style;
-                controlContainer.StyleManager = StyleManager;
-
-                MaximizeBox = false;
-                MinimizeBox = false;
-                Movable = true;
-
-                TopMost = true;
-
-                Size = new Size(400, 200);
-
-                Taskbar myTaskbar = new Taskbar();
-                switch (myTaskbar.Position)
-                {
-                    case TaskbarPosition.Left:
-                        Location = new Point(myTaskbar.Bounds.Width + 5, myTaskbar.Bounds.Height - Height - 5);
-                        break;
-                    case TaskbarPosition.Top:
-                        Location = new Point(myTaskbar.Bounds.Width - Width - 5, myTaskbar.Bounds.Height + 5);
-                        break;
-                    case TaskbarPosition.Right:
-                        Location = new Point(myTaskbar.Bounds.X - Width - 5, myTaskbar.Bounds.Height - Height - 5);
-                        break;
-                    case TaskbarPosition.Bottom:
-                        Location = new Point(myTaskbar.Bounds.Width - Width - 5, myTaskbar.Bounds.Y - Height - 5);
-                        break;
-                    case TaskbarPosition.Unknown:
-                    default:
-                        Location = new Point(Screen.PrimaryScreen.Bounds.Width - Width - 5, Screen.PrimaryScreen.Bounds.Height - Height - 5);
-                        break;
-                }
-
-                controlContainer.Location = new Point(0, 60);
-                controlContainer.Size = new Size(Width - 40, Height - 80);
-                controlContainer.Anchor = AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Left;
-
-                controlContainer.AutoScroll = false;
-                controlContainer.HorizontalScrollbar = false;
-                controlContainer.VerticalScrollbar = false;
-                controlContainer.Refresh();
-
-                if (StyleManager != null)
-                {
-                    StyleManager.Update();
-                }
-
-                isInitialized = true;
-
-                MoveAnimation myMoveAnim = new MoveAnimation();
-                myMoveAnim.Start(controlContainer, new Point(20, 60), TransitionType.EaseInOutCubic, 15);
-            }
 
             base.OnActivated(e);
         }
@@ -215,14 +213,14 @@ namespace MetroFramework.Forms
 
             elapsedTime += 5;
 
-            if (cancelTimer)
+            if (CancelTimer)
                 elapsedTime = 0;
 
             double perc = (double)elapsedTime / ((double)closeTime / 100);
             progressWidth = (int)((double)Width * (perc / 100));
-            Invalidate(new Rectangle(0,0,Width,5));
+            Invalidate(new Rectangle(0, 0, Width, 5));
 
-            if (!cancelTimer)
+            if (!CancelTimer)
                 timer.Reset();
         }
     }

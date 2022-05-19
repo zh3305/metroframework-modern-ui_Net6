@@ -5,6 +5,7 @@ using System.Windows.Forms;
 
 using MetroFramework.Forms;
 using System.Data;
+using MetroFramework.Controls;
 
 namespace MetroFramework.Demo
 {
