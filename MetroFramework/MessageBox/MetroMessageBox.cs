@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Media;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using MetroFramework.Forms;
 using MetroFramework.Interfaces;
@@ -140,7 +141,7 @@ namespace MetroFramework
 
             if (owner != null)
             {
-                Form _owner = (owner as Form == null) ? ((UserControl)owner).ParentForm : (Form)owner;
+                Form _owner = (!(owner is Form form)) ? ((UserControl)owner).ParentForm : form;
                 
                 //int _minWidth = 500;
                 //int _minHeight = 350;
@@ -208,7 +209,8 @@ namespace MetroFramework
                 _control.SetDefaultButton();
 
                 Action<MetroMessageBoxControl> _delegate = new Action<MetroMessageBoxControl>(ModalState);
-                IAsyncResult _asyncresult = _delegate.BeginInvoke(_control, null, _delegate);
+
+                var _asyncresult = Task.Run(() => _delegate.Invoke(_control));
                 bool _cancelled = false;
 
                 try
