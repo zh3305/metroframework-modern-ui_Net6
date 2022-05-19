@@ -22,6 +22,12 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+    <Authors>$(AssemblyName),matthias-hoste,dennismagno,peters</Authors>
+    <Description></Description>
+    <PackageProjectUrl></PackageProjectUrl>
+    <RepositoryUrl>https://github.com/zh3305/metroframework-modern-ui_Net6</RepositoryUrl>
+    <PackageTags>NET6</PackageTags>
+    <PackageId>$(AssemblyName)_Xy</PackageId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>

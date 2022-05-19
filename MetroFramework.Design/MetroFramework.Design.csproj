@@ -17,6 +17,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>../MetroFramework.snk</AssemblyOriginatorKeyFile>
+    <PackageId>$(AssemblyName)_Xy</PackageId>
+    <Company>$(Authors)</Company>
+    <Authors>$(AssemblyName),matthias-hoste,dennismagno,peters</Authors>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\MetroFramework\MetroFramework.csproj" />

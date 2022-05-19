@@ -3,12 +3,15 @@ MetroFramework - WinForms on steroids.
 
 Brings the new Modern UI alias Metro UI of Windows 8 to .NET Windows Forms applications. 
 
+[![NuGet](https://img.shields.io/nuget/v/MetroFramework_Xy?style=flat-square)](https://www.nuget.org/packages/MetroFramework_Xy)[![NuGet](https://img.shields.io/nuget/v/MetroFramework.Design_Xy?style=flat-square)](https://www.nuget.org/packages/MetroFramework.Design_Xy)[![NuGet](https://img.shields.io/nuget/v/MetroFramework.Fonts_Xy?style=flat-square)](https://www.nuget.org/packages/MetroFramework.Fonts_Xy)
+
 Install via NuGet 
 ------------------
-    Install-Package MetroModernUI
+    Install-Package MetroFramework_Xy
+    Install-Package MetroFramework.Design_Xy
+    Install-Package MetroFramework.Fonts_Xy
 
-[Updated to Version 1.4.0](http://denricdenise.info/2016/07/metroframework-modern-ui-version-1-4-0/)
-Link: https://www.nuget.org/packages/MetroModernUI/
+
 
 Documentation
 -------------------
